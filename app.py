@@ -4,6 +4,8 @@ import joblib
 
 app = Flask(__name__)
 
+
+
 # Load the trained model and scalers
 model = joblib.load('Models/crop_prediction_model.pkl')
 scaler = joblib.load('Models/scaler.pkl')
