@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crop Prediction Form</h1>
+        <form action="/predict" method="POST">
+            <label for="N_SOIL">Nitrogen content (N_SOIL):</label>
+            <input type="text" id="N_SOIL" name="N_SOIL" required><br>
+            
+            <label for="P_SOIL">Phosphorus content (P_SOIL):</label>
+            <input type="text" id="P_SOIL" name="P_SOIL" required><br>
+            
+            <label for="K_SOIL">Potassium content (K_SOIL):</label>
+            <input type="text" id="K_SOIL" name="K_SOIL" required><br>
+            
+            <label for="TEMPERATURE">Temperature:</label>
+            <input type="text" id="TEMPERATURE" name="TEMPERATURE" required><br>
+            
+            <label for="HUMIDITY">Humidity:</label>
+            <input type="text" id="HUMIDITY" name="HUMIDITY" required><br>
+            
+            <label for="ph">pH value:</label>
+            <input type="text" id="ph" name="ph" required><br>
+            
+            <label for="RAINFALL">Rainfall:</label>
+            <input type="text" id="RAINFALL" name="RAINFALL" required><br>
+            
+            <label for="STATE">State:</label>
+            <input type="text" id="STATE" name="STATE" required><br>
+            
+            <button type="submit">Predict Crop</button>
+        </form>
+    </div>
+</body>
+</html>
