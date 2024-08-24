@@ -4,267 +4,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crop Prediction</title>
+    <title>Agrivision - Crop Recommendation & Disease Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
-
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #89fffd 0%, #ef32d9 100%);
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
             color: #333;
         }
 
-        .navbar {
-            background-color: #444;
-            color: #fff;
+        header {
+            background-color: #4CAF50;
             padding: 10px 20px;
+            color: white;
+            position: relative;
+        }
+
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
+            position: relative;
+        }
+
+        .nav-container h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #45a049;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+
+        .nav-menu.open {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #4CAF50;
+            width: 200px;
+            border-radius: 5px;
+            padding: 10px 0;
             z-index: 1000;
         }
 
-        .navbar img {
-            width: 50px;
-            height: auto;
-            transition: transform 0.3s ease;
+        .nav-menu.open a {
+            padding: 10px;
+            font-size: 1rem;
+            text-align: center;
         }
 
-        .navbar img:hover {
-            transform: rotate(360deg);
+        .nav-menu.open a:hover {
+            background-color: #45a049;
         }
 
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: url("static/images/bg.jpg") no-repeat center center/cover;
+            color: white;
+            position: relative;
+            background-size: cover;
+            background-position: center;
         }
 
-        .navbar ul li {
-            margin-left: 20px;
-        }
-
-        .navbar ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-
-        .navbar ul li a:hover {
-            color: #f1c40f;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            
-            max-width: 900px;
+        .hero-images {
+            overflow: hidden;
+            max-width: 100%;
             margin: 20px auto;
-            backdrop-filter: blur(10px);
-            transform: translateY(-20px);
-            animation: fadeInUp 0.7s ease forwards;
+            position: relative;
         }
 
-        @keyframes fadeInUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
+        .carousel {
+            display: flex;
+            width: calc(500px * 4 + 30px * 3); /* Adjust width based on images and spacing */
+            animation: slide 30s linear infinite;
+        }
+
+        .carousel img {
+            width: 500px;
+            height: auto;
+            margin: 0 15px;
+            border-radius: 10px;
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
             }
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 32px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: #444;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-        form {
+        .features {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: center;
+            padding: 60px 20px;
+            background-color: #fff;
         }
 
-        .form-group {
-            width: 48%;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 768px) {
-            .form-group {
-                width: 100%;
-            }
-        }
-
-        label {
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 16px;
-            color: #555;
-            display: block;
-        }
-
-        input {
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 16px;
-            background: #f0f0f0;
-            color: #333;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            background: #e0e0e0;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-        }
-
-        button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 18px 20px;
-            cursor: pointer;
-            font-size: 18px;
-            text-transform: uppercase;
-            font-weight: bold;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .footer {
-            background-color: #444;
-            color: #fff;
+        .feature {
+            flex: 1;
+            display: block; 
+            text-decoration: none; 
+            max-width: 300px;
+            margin: 20px;
             text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            margin-top: auto;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
-        .section {
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta button {
+            padding: 15px 30px;
+            background-color: #fff;
+            color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta button:hover {
+            background-color: #f4f4f4;
+        }
+
+        .signup {
+            background-color: #fff;
             padding: 60px 20px;
             text-align: center;
-            color: #fff;
+            border-top: 1px solid #ddd;
         }
 
-        #home {
-            background-color: #1abc9c;
+        .signup h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
 
-        #about {
-            background-color: #8e44ad;
+        .signup form {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        #contact {
-            background-color: #e74c3c;
+        .signup input[type="text"],
+        .signup input[type="email"],
+        .signup input[type="password"],
+        .signup button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
         }
 
-        /* Responsive for mobile view */
+        .signup button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .signup button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
         @media (max-width: 768px) {
-            .navbar ul {
-                flex-direction: row;
-                justify-content: space-around;
-                width: 100%;
+            .carousel {
+                width: calc(300px * 4 + 30px * 3); /* Adjust width for smaller screens */
             }
 
-            .navbar ul li {
-                margin-left: 0;
+            .carousel img {
+                width: 300px;
             }
 
-            .footer {
+            .feature {
+                max-width: 100%;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hamburger {
                 display: flex;
-                flex-direction: row;
-                justify-content: space-around;
-                text-align: center;
-                font-size: 12px;
+            }
+
+            .nav-menu.open {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .cta h2 {
+                font-size: 1.5rem;
+            }
+
+            .signup h2 {
+                font-size: 1.5rem;
+            }
+
+            .carousel img {
+                width: 250px;
+                margin: 0 10px;
+            }
+
+            nav a {
+                padding: 5px 10px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="navbar">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+    <header>
+        <div class="nav-container">
+            <h1>Agrivision</h1>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#features">Features</a>
+                <a href="#signup">Sign Up</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-images">
+            <div class="carousel">
+                <img src="static/images/img1.jpg" alt="Image 1">
+                <img src="static/images/img2.jpg" alt="Image 2">
+                <img src="static/images/img3.jpg" alt="Image 3">
+                <img src="static/images/img1.jpg" alt="Image 1 Clone">
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <h1>Predict Your Crop</h1>
-        <form action="/predict" method="POST">
-            <div class="form-group">
-                <label for="N_SOIL">Nitrogen content (N_SOIL):</label>
-                <input type="text" id="N_SOIL" name="N_SOIL" required>
-            </div>
-            <div class="form-group">
-                <label for="P_SOIL">Phosphorus content (P_SOIL):</label>
-                <input type="text" id="P_SOIL" name="P_SOIL" required>
-            </div>
-            <div class="form-group">
-                <label for="K_SOIL">Potassium content (K_SOIL):</label>
-                <input type="text" id="K_SOIL" name="K_SOIL" required>
-            </div>
-            <div class="form-group">
-                <label for="TEMPERATURE">Temperature:</label>
-                <input type="text" id="TEMPERATURE" name="TEMPERATURE" required>
-            </div>
-            <div class="form-group">
-                <label for="HUMIDITY">Humidity:</label>
-                <input type="text" id="HUMIDITY" name="HUMIDITY" required>
-            </div>
-            <div class="form-group">
-                <label for="ph">pH value:</label>
-                <input type="text" id="ph" name="ph" required>
-            </div>
-            <div class="form-group">
-                <label for="RAINFALL">Rainfall:</label>
-                <input type="text" id="RAINFALL" name="RAINFALL" required>
-            </div>
-            <div class="form-group">
-                <label for="STATE">State:</label>
-                <input type="text" id="STATE" name="STATE" required>
-            </div>
-            <button type="submit">Predict Crop</button>
-        </form>
+    <div class="features" id="features">
+        <a href="/croprecommended" class="feature">
+            <h3>Crop Recommendation</h3>
+            <p>Get personalized crop recommendations based on soil, climate, and other factors.</p>
+        </a>
+        <div class="feature">
+            <h3>Disease Prediction</h3>
+            <p>Predict and prevent crop diseases with real-time alerts and actionable insights.</p>
+        </div>
+    </div>
+    
+
+    <div class="cta">
+        <h2>Start Your Journey with Agrivision Today</h2>
+        <button>Get Started</button>
     </div>
 
-    <div class="footer">
-        &copy; 2024 Crop Prediction. All Rights Reserved.
-    </div>
+    <footer>
+        <p>&copy; 2024 Agrivision. Developed by Pruthviraj Patil.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('open');
+        }
+    </script>
 </body>
 
 </html>

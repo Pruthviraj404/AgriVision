@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #89fffd 0%, #ef32d9 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #444;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar img {
+            width: 50px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar img:hover {
+            transform: rotate(360deg);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #f1c40f;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            
+            max-width: 900px;
+            margin: 20px auto;
+            backdrop-filter: blur(10px);
+            transform: translateY(-20px);
+            animation: fadeInUp 0.7s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #444;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            width: 48%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                width: 100%;
+            }
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            color: #555;
+            display: block;
+        }
+
+        input {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            background: #f0f0f0;
+            color: #333;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            background: #e0e0e0;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 18px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            background-color: #444;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .section {
+            padding: 60px 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #home {
+            background-color: #1abc9c;
+        }
+
+        #about {
+            background-color: #8e44ad;
+        }
+
+        #contact {
+            background-color: #e74c3c;
+        }
+
+        /* Responsive for mobile view */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: row;
+                justify-content: space-around;
+                width: 100%;
+            }
+
+            .navbar ul li {
+                margin-left: 0;
+            }
+
+            .footer {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                text-align: center;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>Predict Your Crop</h1>
+        <form action="/cropresult" method="POST">
+            <div class="form-group">
+                <label for="N_SOIL">Nitrogen content (N_SOIL):</label>
+                <input type="text" id="N_SOIL" name="N_SOIL" required>
+            </div>
+            <div class="form-group">
+                <label for="P_SOIL">Phosphorus content (P_SOIL):</label>
+                <input type="text" id="P_SOIL" name="P_SOIL" required>
+            </div>
+            <div class="form-group">
+                <label for="K_SOIL">Potassium content (K_SOIL):</label>
+                <input type="text" id="K_SOIL" name="K_SOIL" required>
+            </div>
+            <div class="form-group">
+                <label for="TEMPERATURE">Temperature:</label>
+                <input type="text" id="TEMPERATURE" name="TEMPERATURE" required>
+            </div>
+            <div class="form-group">
+                <label for="HUMIDITY">Humidity:</label>
+                <input type="text" id="HUMIDITY" name="HUMIDITY" required>
+            </div>
+            <div class="form-group">
+                <label for="ph">pH value:</label>
+                <input type="text" id="ph" name="ph" required>
+            </div>
+            <div class="form-group">
+                <label for="RAINFALL">Rainfall:</label>
+                <input type="text" id="RAINFALL" name="RAINFALL" required>
+            </div>
+            <div class="form-group">
+                <label for="STATE">State:</label>
+                <input type="text" id="STATE" name="STATE" required>
+            </div>
+            <button type="submit">Predict Crop</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Crop Prediction. All Rights Reserved.
+    </div>
+</body>
+
+</html>

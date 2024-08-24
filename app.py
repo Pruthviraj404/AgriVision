@@ -16,7 +16,11 @@ le_crop = joblib.load('Models/label_encoder_crop.pkl')
 def home():
     return render_template('index.html')
 
-@app.route('/predict', methods=['POST'])
+@app.route('/croprecommended')
+def cropform():
+    return render_template('croprecommended.html')
+
+@app.route('/cropresult', methods=['POST'])
 def predict():
     data = request.form.to_dict()
     try:
